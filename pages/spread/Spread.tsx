@@ -1,19 +1,19 @@
 import Head from 'next/head'
 
-import s from './index.module.scss'
+import s from './Spread.module.scss'
 
 
-const Home: React.FunctionComponent = () => (
+const Spread: React.FunctionComponent = () => (
   <div className={s.container}>
     <Head>
-      <title>Crypto project</title>
+      <title>Crypto project - Spread</title>
       <meta name="description" content="Crypto project" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    Content: Home
+    Content: Spread
   </div>
 )
 
 
-export default Home
+export default Spread
