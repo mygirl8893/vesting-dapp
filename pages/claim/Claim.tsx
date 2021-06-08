@@ -11,7 +11,7 @@ const Claim: React.FunctionComponent = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    Content: Claim
+    <div>Content: Claim</div>
   </div>
 )
 

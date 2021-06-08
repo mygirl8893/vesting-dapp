@@ -11,7 +11,7 @@ const Spread: React.FunctionComponent = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
-    Content: Spread
+    <div>Content: Spread</div>
   </div>
 )
 

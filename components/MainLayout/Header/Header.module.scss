@@ -2,8 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  max-width: 1344px;
+  margin: 0 auto;
+  padding: 16px;
 }
 
-.link {
-  padding: 10px;
+.logo {
+  margin-right: 30px;
 }

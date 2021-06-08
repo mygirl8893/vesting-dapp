@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('./images/unlock.png');
+  background-position: center;
+  background-size: cover;
+  height: 470px;
+}
+
+.content {
+  text-align: center;
+
+  h1 {
+    font-size: 54px;
+    margin-bottom: 40px;
+  }
+
+  h2 {
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 40px;
+  }
+
+  button {
+    border-radius: 4px;
+    border: none;
+    padding: 9px 48px;
+    font-size: 25px;
+    background-color: #ffd300;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 1023px) {
+
+  .content {
+  
+    h1 {
+      font-size: 35px;
+      margin-bottom: 30px;
+    }
+  
+    h2 {
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+
+  .content {
+  
+    h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+  
+    h2 {
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+  }
+}
