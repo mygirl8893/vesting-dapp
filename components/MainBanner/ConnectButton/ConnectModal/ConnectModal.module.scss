@@ -1,0 +1,124 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #171717c7;
+}
+
+.modal {
+  background-color: #3d454d;
+  width: 650px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.title {
+  font-size: 24px;
+  color: #dadada;
+}
+
+.metaMask {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.metaMaskLogo {
+  margin-right: 16px;
+  width: 38px;
+  height: 40px;
+  background-image: url('./images/fox.png');
+  background-size: contain;
+}
+
+.metaMaskTitle {
+  color: #82909e;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.note {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #dadada;
+}
+
+.controls {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    border-radius: 20px;
+    border: solid 1px #ffd300;
+    color: #ffd300;
+    padding: 8px 24px;
+    font-size: 16px;
+    background-color: transparent;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #312b13;
+      transition: .1s;
+    }
+  }
+}
+
+// Loader
+
+.loader {
+  width: 60px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.loaderWheel {
+  animation: spin 1s infinite linear;
+  border: 2px solid #3d454d;
+  border-left: 4px solid #fff;
+  border-radius: 50%;
+  height: 50px;
+  margin-bottom: 10px;
+  width: 50px;
+}
+
+.loaderText {
+  color: #fff;
+  font-family: arial, sans-serif;
+}
+
+.loaderText:after {
+  content: 'Loading';
+  animation: load 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load {
+  0% {
+    content: 'Loading';
+  }
+  33% {
+    content: 'Loading.';
+  }
+  67% {
+    content: 'Loading..';
+  }
+  100% {
+    content: 'Loading...';
+  }
+}
