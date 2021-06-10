@@ -43,7 +43,7 @@ const SpreadForm: React.FunctionComponent = () => {
   const changeEndDate = (value: Date) => setFormValue('endDate', value)
 
   const isStartDateExist = Boolean(form.values.startDate)
-  const startDate = new Date(form.values.startDate as Date)
+  const startDate: Date = new Date(form.values.startDate as Date)
 
   return (
     <div className={s.container}>
@@ -71,7 +71,7 @@ const SpreadForm: React.FunctionComponent = () => {
             wrapperClassName={s.datePicker}
             selected={form.values.endDate}
             minDate={new Date()}
-            maxDate={isStartDateExist && startDate.setFullYear(startDate.getFullYear() + 1)}
+            maxDate={isStartDateExist ? new Date(startDate.setFullYear(startDate.getFullYear() + 1)) : null}
             disabled={!isStartDateExist}
             placeholderText={isStartDateExist ? '' : "Need to select start date"}
             onChange={changeEndDate}
