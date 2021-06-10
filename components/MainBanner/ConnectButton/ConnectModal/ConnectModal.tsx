@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import MetaMaskOnboarding from '@metamask/onboarding'
-import { useDispatch } from 'react-redux'
-import { setMetaMaskData } from 'redux/main'
+import { useDispatch, useSelector } from 'react-redux'
+import { setMetaMaskData, selectMetaMaskFlags, setMetaMaskLoading, setMetaMaskConnectionError } from 'redux/main'
 import Modal from 'react-modal'
 
 import s from './ConnectModal.module.scss'
@@ -13,12 +13,14 @@ type ConnectModalProps = {
 }
 
 const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onClose }) => {
-  const onboarding = useRef<any>()
-  const [ isLoading, setLoading ] = useState<boolean>(false)
-  const [ isNeedApproval, setNeedApproval ] = useState<boolean>(false)
-  const [ isConnectionError, setConnectionError ] = useState<boolean>(false)
-
   const dispatch = useDispatch()
+  const onboarding = useRef<any>()
+
+  const {
+    isMetaMaskLoading,
+    isMetaMaskNeedApproval,
+    isMetaMaskConnectionError,
+  } = useSelector(selectMetaMaskFlags)
 
   useEffect(() => {
     if (!onboarding.current) {
@@ -26,48 +28,19 @@ const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onCl
     }
   }, [])
 
-  useEffect(() => {
-    const handleNewAccounts = (accounts: string[]) => {
-      dispatch(setMetaMaskData(accounts))
-      setNeedApproval(false)
-    }
-
-    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      setNeedApproval(true)
-
-      window.ethereum
-        .request({ method: 'eth_requestAccounts' })
-        .then(handleNewAccounts)
-        .catch(({ code }: any) => {
-          if (code === 4001) { // user not aprove connection
-            setConnectionError(true)
-            setNeedApproval(false)
-          }
-        })
-
-      window.ethereum.on('accountsChanged', handleNewAccounts)
-
-      return () => {
-        if (typeof window.ethereum.off === 'function') {
-          window.ethereum.off('accountsChanged', handleNewAccounts)
-        }
-      }
-    }
-  }, [])
-
   const handleInstall = () => {
-    setLoading(true)
+    dispatch(setMetaMaskLoading(true))
 
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       window.ethereum
         .request({ method: 'eth_requestAccounts' })
         .then((accounts: any[]) => {
           dispatch(setMetaMaskData(accounts))
-          setLoading(false)
+          dispatch(setMetaMaskLoading(false))
         })
         .catch(() => {
-          setConnectionError(true)
-          setLoading(false)
+          dispatch(setMetaMaskConnectionError(true))
+          dispatch(setMetaMaskLoading(false))
         })
     } else {
       onboarding.current.startOnboarding()
@@ -75,7 +48,7 @@ const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onCl
   }
 
   const controls = useMemo(() => {
-    if (isLoading) {
+    if (isMetaMaskLoading) {
       return (
         <div className={s.infoText}>
           You have started installing the extension. Complete it and refresh the page.
@@ -83,7 +56,7 @@ const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onCl
       )
     }
 
-    if (isNeedApproval) {
+    if (isMetaMaskNeedApproval) {
       return (
         <div className={s.infoText}>
           Go to your MetaMask extension and confirm the connection to the site.
@@ -91,7 +64,7 @@ const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onCl
       )
     }
 
-    if (isConnectionError) {
+    if (isMetaMaskConnectionError) {
       return (
         <>
           <div className={s.errorText}>
@@ -119,7 +92,7 @@ const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onCl
         </button>
       </div>
     )
-  }, [ isLoading, isConnectionError, isNeedApproval ])
+  }, [ isMetaMaskLoading, isMetaMaskConnectionError, isMetaMaskNeedApproval ])
 
   return (
     <Modal 
