@@ -43,7 +43,7 @@ const SpreadForm: React.FunctionComponent = () => {
     const hasEmpty = !Object.values(form.values).every(Boolean)
     const incorrectAddress = false // need to add RegEx
     const incorrectAmountCount = form.values.amount && +form.values.amount < 0.00001 // need to change this value
-    const incorrectAmountValue = form.values.amount && /\D/.test(form.values.amount)
+    const incorrectAmountValue = form.values.amount && !/[0-9\.]/.test(form.values.amount)
 
     if (hasEmpty) {
       return handleSetError('All fields are required')
