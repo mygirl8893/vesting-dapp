@@ -16,16 +16,14 @@ export const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
-    setMetaMaskConnectedStatus: (state, action: PayloadAction<boolean>) => {
-      state.isMetaMaskConnected = action.payload
-    },
-    setMetaMaskAccounts: (state, action: PayloadAction<string[]>) => {
+    setMetaMaskData: (state, action: PayloadAction<InitialState['accounts']>) => {
+      state.isMetaMaskConnected = true
       state.accounts = action.payload
     },
   },
 })
 
-export const { setMetaMaskConnectedStatus, setMetaMaskAccounts } = mainSlice.actions
+export const { setMetaMaskData } = mainSlice.actions
 
 export const selectMetaMaskConnected = (state: RootState) => state.main.isMetaMaskConnected
 export const selectMetaMaskAccounts = (state: RootState) => state.main.accounts

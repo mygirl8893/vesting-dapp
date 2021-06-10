@@ -71,54 +71,16 @@
   }
 }
 
-// Loader
-
-.loader {
-  width: 60px;
-  height: 80px;
-  margin: 0 auto;
+.infoText {
+  margin-top: 32px;
+  color: #ffd300;
+  font-size: 14px;
+  text-align: center;
 }
 
-.loaderWheel {
-  animation: spin 1s infinite linear;
-  border: 2px solid #3d454d;
-  border-left: 4px solid #fff;
-  border-radius: 50%;
-  height: 50px;
-  margin-bottom: 10px;
-  width: 50px;
-}
-
-.loaderText {
-  color: #fff;
-  font-family: arial, sans-serif;
-}
-
-.loaderText:after {
-  content: 'Loading';
-  animation: load 2s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes load {
-  0% {
-    content: 'Loading';
-  }
-  33% {
-    content: 'Loading.';
-  }
-  67% {
-    content: 'Loading..';
-  }
-  100% {
-    content: 'Loading...';
-  }
+.errorText {
+  margin-top: 16px;
+  color: #f06a6a;
+  font-size: 14px;
+  text-align: center;
 }

@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import MetaMaskOnboarding from '@metamask/onboarding'
-import { useSelector, useDispatch } from 'react-redux'
-import { selectMetaMaskConnected, setMetaMaskConnectedStatus, setMetaMaskAccounts } from 'redux/main'
+import { useDispatch } from 'react-redux'
+import { setMetaMaskData } from 'redux/main'
 import Modal from 'react-modal'
 
 import s from './ConnectModal.module.scss'
@@ -13,14 +13,12 @@ type ConnectModalProps = {
 }
 
 const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onClose }) => {
-  const [ isDisabled, setDisabled ] = useState<boolean>(false)
-  const [ isLoading, setLoading ] = useState<boolean>(true)
-  const [ accounts, setAccounts ] = useState<string[]>([])
+  const onboarding = useRef<any>()
+  const [ isLoading, setLoading ] = useState<boolean>(false)
+  const [ isNeedApproval, setNeedApproval ] = useState<boolean>(false)
+  const [ isConnectionError, setConnectionError ] = useState<boolean>(false)
 
   const dispatch = useDispatch()
-  const isMetaMaskConnected = useSelector(selectMetaMaskConnected)
-
-  const onboarding = useRef<any>()
 
   useEffect(() => {
     if (!onboarding.current) {
@@ -29,29 +27,23 @@ const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onCl
   }, [])
 
   useEffect(() => {
-    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      if (accounts.length > 0) {
-        dispatch(setMetaMaskConnectedStatus(!isMetaMaskConnected))
-        dispatch(setMetaMaskAccounts(accounts))
-        setDisabled(true)
-        onboarding.current.stopOnboarding()
-      } else {
-        setDisabled(false)
-        setLoading(false)
-      }
-    }
-  }, [ accounts ])
-
-  useEffect(() => {
-    const handleNewAccounts = (newAccounts: string[]) => {
-      setAccounts(newAccounts)
-      setLoading(false)
+    const handleNewAccounts = (accounts: string[]) => {
+      dispatch(setMetaMaskData(accounts))
+      setNeedApproval(false)
     }
 
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      setNeedApproval(true)
+
       window.ethereum
         .request({ method: 'eth_requestAccounts' })
         .then(handleNewAccounts)
+        .catch(({ code }: any) => {
+          if (code === 4001) { // user not aprove connection
+            setConnectionError(true)
+            setNeedApproval(false)
+          }
+        })
 
       window.ethereum.on('accountsChanged', handleNewAccounts)
 
@@ -64,14 +56,70 @@ const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onCl
   }, [])
 
   const handleInstall = () => {
+    setLoading(true)
+
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       window.ethereum
         .request({ method: 'eth_requestAccounts' })
-        .then((newAccounts: any[]) => setAccounts(newAccounts))
+        .then((accounts: any[]) => {
+          dispatch(setMetaMaskData(accounts))
+          setLoading(false)
+        })
+        .catch(() => {
+          setConnectionError(true)
+          setLoading(false)
+        })
     } else {
       onboarding.current.startOnboarding()
     }
   }
+
+  const controls = useMemo(() => {
+    if (isLoading) {
+      return (
+        <div className={s.infoText}>
+          You have started installing the extension. Complete it and refresh the page.
+        </div>
+      )
+    }
+
+    if (isNeedApproval) {
+      return (
+        <div className={s.infoText}>
+          Go to your MetaMask extension and confirm the connection to the site.
+        </div>
+      )
+    }
+
+    if (isConnectionError) {
+      return (
+        <>
+          <div className={s.errorText}>
+            Connection error
+          </div>
+          <div className={s.controls}>
+            <button onClick={handleInstall}>
+              Try again
+            </button>
+            <button onClick={onClose}>
+              Close
+            </button>
+          </div>
+        </>
+      )
+    }
+
+    return (
+      <div className={s.controls}>
+        <button onClick={handleInstall}>
+          Install MetaMask
+        </button>
+        <button onClick={onClose}>
+          Close
+        </button>
+      </div>
+    )
+  }, [ isLoading, isConnectionError, isNeedApproval ])
 
   return (
     <Modal 
@@ -81,38 +129,20 @@ const ConnectModal: React.FunctionComponent<ConnectModalProps> = ({ isOpen, onCl
         className={s.modal}
         overlayClassName={s.overlay}
     >
-      {
-        isLoading ? (
-          <div className={s.loader}>
-            <div className={s.loaderWheel}></div>
-            <div className={s.loaderText}></div>
-          </div>
-        ) : (
-        <>
-          <div className={s.title}>
-            Select a Wallet
-          </div>
-          <div className={s.metaMask}>
-            <div className={s.metaMaskLogo} />
-            <div className={s.metaMaskTitle}>
-              MetaMask
-            </div>
-          </div>
-          <div className={s.note}>
-            You'll need to install <b>MetaMask</b> to continue. <br />
-            Once you have it installed, go ahead and <b>refresh the page</b>.
-          </div>
-          <div className={s.controls}>
-            <button disabled={isDisabled} onClick={handleInstall}>
-              Install MetaMask
-            </button>
-            <button onClick={onClose}>
-              Close
-            </button>
-          </div>
-        </>
-        )
-      }
+      <div className={s.title}>
+        Select a Wallet
+      </div>
+      <div className={s.metaMask}>
+        <div className={s.metaMaskLogo} />
+        <div className={s.metaMaskTitle}>
+          MetaMask
+        </div>
+      </div>
+      <div className={s.note}>
+        You'll need to install <b>MetaMask</b> to continue. <br />
+        Once you have it installed, go ahead and <b>refresh the page</b>.
+      </div>
+      {controls}
     </Modal>
   )
 }
