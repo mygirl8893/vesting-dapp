@@ -1,5 +1,7 @@
 import Head from 'next/head'
 
+import SpreadForm from './SpreadForm/SpreadForm'
+
 import s from './Spread.module.scss'
 
 
@@ -10,8 +12,7 @@ const Spread: React.FunctionComponent = () => (
       <meta name="description" content="Crypto project" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
-
-    <div>Content: Spread</div>
+    <SpreadForm />
   </div>
 )
 

@@ -19,7 +19,13 @@ const Home: React.FunctionComponent = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {
-        isMetaMaskConnected ? `Connected ${accounts[0]}` : <MainBanner />
+        isMetaMaskConnected ? (
+          <div className={s.accountContainer}>
+            <div>Your account id: <b>{accounts[0]}</b></div>
+          </div>
+        ) : (
+          <MainBanner />
+        )
       }
     </div>
   )
