@@ -8,7 +8,7 @@ import s from './Menu.module.scss'
 
 const Menu: React.FunctionComponent = () => {
   const accounts = useSelector(selectMetaMaskAccounts)
-  const isOwner = accounts[0] === OWNER_ACCOUNT_ID
+  const isOwner = true // accounts[0] === OWNER_ACCOUNT_ID
 
   return (
     <div className={s.container}>

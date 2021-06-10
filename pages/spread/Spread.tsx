@@ -1,5 +1,7 @@
 import Head from 'next/head'
 
+import availableWithMetaMask from 'decorators/availableWithMetaMask'
+
 import SpreadForm from './SpreadForm/SpreadForm'
 
 import s from './Spread.module.scss'
@@ -17,4 +19,4 @@ const Spread: React.FunctionComponent = () => (
 )
 
 
-export default Spread
+export default availableWithMetaMask(Spread)

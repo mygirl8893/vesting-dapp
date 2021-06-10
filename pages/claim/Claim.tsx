@@ -1,5 +1,7 @@
 import Head from 'next/head'
 
+import availableWithMetaMask from 'decorators/availableWithMetaMask'
+
 import s from './Claim.module.scss'
 
 
@@ -16,4 +18,4 @@ const Claim: React.FunctionComponent = () => (
 )
 
 
-export default Claim
+export default availableWithMetaMask(Claim)

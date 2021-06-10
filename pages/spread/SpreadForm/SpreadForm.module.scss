@@ -3,11 +3,20 @@
   max-width: 800px;
 }
 
+.titleContainer {
+  color: #a8adbb;
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+}
+
 .formContainer {
+  margin-top: 20px;
   width: 100%;
   padding: 20px;
-  border: solid 1px #ffd300;
-  border-radius: 20px;
+  border: solid 1px #494b54;
+  background-color: #252527;
+  border-radius: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -21,11 +30,20 @@
 .title {
   font-size: 18px;
   margin-bottom: 8px;
+  color: #a8adbb;
 }
 
 .input {
   width: 100%;
   padding: 10px 20px;
+  border-radius: 8px;
+  background-color: #d1d3dc;
+  border: none;
+  outline: none;
+
+  &:focus {
+    background-color: white;
+  }
 }
 
 .datePicker {
@@ -34,6 +52,14 @@
   input {
     width: 100%;
     padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #d1d3dc;
+    border: none;
+    outline: none;
+
+    &:focus {
+      background-color: white;
+    }
   }
 }
 
@@ -42,8 +68,15 @@
   text-align: center;
 }
 
+.errorContainer {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #ff8888;
+  text-align: center;
+}
+
 .button {
-  border-radius: 4px;
+  border-radius: 8px;
   border: none;
   padding: 9px 48px;
   font-size: 25px;
