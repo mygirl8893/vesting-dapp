@@ -11,7 +11,6 @@ const availableWithMetaMask: AvailableWithMetaMask = (ComposedComponent?) => {
     const router = useRouter()
     const { isMetaMaskConnected } = useSelector(selectMetaMaskFlags)
 
-    console.log('isMetaMaskConnected', isMetaMaskConnected)
     if (!isMetaMaskConnected) {
       router.push('/')
 
