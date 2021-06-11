@@ -1,6 +1,7 @@
 .container {
   width: 100%;
   max-width: 800px;
+  padding: 32px;
 }
 
 .titleContainer {
@@ -14,9 +15,7 @@
   margin-top: 20px;
   width: 100%;
   padding: 20px;
-  border: solid 1px #494b54;
-  background-color: #252527;
-  border-radius: 10px;
+  background-color: #202021;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -30,19 +29,19 @@
 .title {
   font-size: 18px;
   margin-bottom: 8px;
-  color: #a8adbb;
+  color: #d8dae0;
 }
 
 .input {
   width: 100%;
   padding: 10px 20px;
-  border-radius: 8px;
   background-color: #d1d3dc;
-  border: none;
+  border: solid 2px #202021;
   outline: none;
 
   &:focus {
     background-color: white;
+    border-color: white;
   }
 }
 
@@ -52,13 +51,13 @@
   input {
     width: 100%;
     padding: 10px 20px;
-    border-radius: 8px;
     background-color: #d1d3dc;
-    border: none;
+    border: solid 2px #202021;
     outline: none;
 
     &:focus {
       background-color: white;
+      border-color: white;
     }
   }
 }
@@ -76,9 +75,8 @@
 }
 
 .button {
-  border-radius: 8px;
   border: none;
-  padding: 9px 48px;
+  padding: 8px 100px;
   font-size: 25px;
   background-color: #ffd300;
   cursor: pointer;
@@ -86,5 +84,18 @@
   &:hover {
     background-color: #ffeb86;
     transition: .1s;
+  }
+}
+
+
+@media (max-width: 650px) {
+
+  .container {
+    padding: 16px;
+  }
+
+  .formContainer {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
   }
 }

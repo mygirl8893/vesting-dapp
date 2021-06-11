@@ -41,7 +41,7 @@ const SpreadForm: React.FunctionComponent = () => {
 
   const handleSumbit = () => {
     const hasEmpty = !Object.values(form.values).every(Boolean)
-    const incorrectAddress = false // need to add RegEx
+    const incorrectAddress = !/^0x[a-fA-F0-9]{40}$/.test(form.values.address)
     const incorrectAmountCount = form.values.amount && +form.values.amount < 0.00001 // need to change this value
     const incorrectAmountValue = form.values.amount && !/[0-9\.]/.test(form.values.amount)
 

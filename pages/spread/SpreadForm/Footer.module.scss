@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1344px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+@media (max-width: 500px) {
+
+  .copy {
+    width: 180px;
+    text-align: right;
+  }
+}
