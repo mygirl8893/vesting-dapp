@@ -10,21 +10,23 @@ const HomeControlls: React.FunctionComponent = (props) => {
 
   return (
     <div className={s.container}>
-      <div className={s.address}>
-        <div className={s.addressTitle}>
-          Your address:
+      <div className={s.box}>
+        <div className={s.address}>
+          <div className={s.addressTitle}>
+            Your address:
+          </div>
+          <div className={s.addressContent}>
+            {address}
+          </div>
         </div>
-        <div className={s.addressContent}>
-          {address}
+        <div className={s.controlls}>
+          <Link href="/spread">
+            <a className={s.link}>Spread</a>
+          </Link>
+          <Link href="/claim">
+            <a className={s.link}>Claim</a>
+          </Link>
         </div>
-      </div>
-      <div className={s.controlls}>
-        <Link href="/spread">
-          <a className={s.link}>Spread</a>
-        </Link>
-        <Link href="/claim">
-          <a className={s.link}>Claim</a>
-        </Link>
       </div>
     </div>
   )
