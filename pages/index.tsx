@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { selectMetaMaskFlags, selectMetaMaskAccounts } from 'redux/main'
 
 import MainBanner from 'components/MainBanner/MainBanner'
+import HomeControlls from 'components/HomeControlls/HomeControlls'
 
 import s from './index.module.scss'
 
@@ -20,9 +21,7 @@ const Home: React.FunctionComponent = () => {
       </Head>
       {
         isMetaMaskConnected ? (
-          <div className={s.accountContainer}>
-            <div>Your account id: <b>{accounts[0]}</b></div>
-          </div>
+          <HomeControlls />
         ) : (
           <MainBanner />
         )
