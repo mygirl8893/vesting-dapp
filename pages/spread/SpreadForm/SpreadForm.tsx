@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import { useSelector } from 'react-redux'
+import { holdTokens } from 'helpers/contract'
+import { selectMetaMaskAccounts } from 'redux/main'
 
 import s from './SpreadForm.module.scss'
+import 'react-datepicker/dist/react-datepicker.css'
 
 
 type Form = {
@@ -11,17 +14,21 @@ type Form = {
     amount: string
     startDate: Date | null
     endDate: Date | null
+    cliffDate: Date | null
   },
   error: string
 }
 
 const SpreadForm: React.FunctionComponent = () => {
+  const [ userAddress ] = useSelector(selectMetaMaskAccounts)
+
   const [ form, changeForm ] = useState<Form>({
     values: {
       address: '',
       amount: '',
       startDate: null,
       endDate: null,
+      cliffDate: null,
     },
     error: '',
   })
@@ -38,12 +45,17 @@ const SpreadForm: React.FunctionComponent = () => {
   const handleChangeAmount = (event: any) => setFormValue('amount', event.target.value)
   const handlechangeStartDate = (value: Date) => setFormValue('startDate', value)
   const handleChangeEndDate = (value: Date) => setFormValue('endDate', value)
+  const handleChangeCliffDate = (value: Date) => setFormValue('cliffDate', value)
 
   const handleSumbit = () => {
     const hasEmpty = !Object.values(form.values).every(Boolean)
     const incorrectAddress = !/^0x[a-fA-F0-9]{40}$/.test(form.values.address)
     const incorrectAmountCount = form.values.amount && +form.values.amount < 0.00001 // need to change this value
     const incorrectAmountValue = form.values.amount && !/[0-9\.]/.test(form.values.amount)
+
+    if (form.error) {
+      handleSetError('')
+    }
 
     if (hasEmpty) {
       return handleSetError('All fields are required')
@@ -61,11 +73,28 @@ const SpreadForm: React.FunctionComponent = () => {
       return handleSetError('Not valid amount')
     }
 
-    // Do request ...
+    const { address, amount, startDate, endDate, cliffDate } = form.values
+
+    const getSeconds = (date: Date): number => parseInt(String(new Date(date).getTime() / 1000))
+
+    holdTokens({
+      from: userAddress,
+      params: {
+        address,
+        amount,
+        startDate: getSeconds(startDate as Date),
+        endDate: getSeconds(endDate as Date),
+        cliffDate: getSeconds(cliffDate as Date),
+      },
+    })
+      .on('error', (error: any) => {
+        handleSetError(error?.message)
+      })
   }
 
   const isStartDateExist = Boolean(form.values.startDate)
-  const startDate: Date = new Date(form.values.startDate as Date)
+  const isEndDateExist = Boolean(form.values.endDate)
+  const startDate = new Date(form.values.startDate as Date)
 
   return (
     <div className={s.container}>
@@ -100,6 +129,25 @@ const SpreadForm: React.FunctionComponent = () => {
             onChange={handleChangeEndDate}
           />
         </div>
+        <div className={s.box}>
+          <div className={s.title}>Cliff date:</div>
+          <DatePicker
+            wrapperClassName={s.datePicker}
+            selected={form.values.cliffDate}
+            minDate={isStartDateExist ? new Date(form.values.startDate as Date) : null}
+            maxDate={isEndDateExist ? new Date(form.values.endDate as Date) : null}
+            disabled={!isStartDateExist || !isEndDateExist}
+            placeholderText={(isStartDateExist && isEndDateExist) ? '' : "Need to select start and end dates"}
+            onChange={handleChangeCliffDate}
+          />
+        </div>
+        <div className={s.box}>
+          <div className={s.buttonContainer}>
+            <button className={s.button} onClick={handleSumbit}>
+              Send
+            </button>
+          </div>
+        </div>
       </div>
       {
         Boolean(form.error) && (
@@ -108,11 +156,6 @@ const SpreadForm: React.FunctionComponent = () => {
           </div>
         )
       }
-      <div className={s.buttonContainer}>
-        <button className={s.button} onClick={handleSumbit}>
-          Send
-        </button>
-      </div>
     </div>
   )
 }

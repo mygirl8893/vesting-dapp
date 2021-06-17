@@ -1,7 +1,9 @@
+import { claim } from 'helpers/contract'
+
 import s from './InfoBlock.module.scss'
 
-
-type InfoBlock = {
+// TODO - remove any
+type InfoBlock = any | {
   address: string
   startDate: Date
   endDate: Date
@@ -14,8 +16,12 @@ type InfoBlock = {
 
 const formatDate = (date: Date) => {
   if (date instanceof Date) {
-    const day = date.getDate()
-    const month = date.getMonth()
+    let day: string | number = date.getDate()
+    day = day < 10 ? `0${day}` : day
+
+    let month: string | number = date.getMonth() + 1
+    month = month < 10 ? `0${month}` : month
+
     const year = date.getFullYear()
 
     return `${month}/${day}/${year}`
@@ -31,7 +37,10 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
   } = props
 
   const handleClick = () => {
-    // Do logic...
+    claim(address)
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   return (
@@ -105,7 +114,11 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
           </div>
         </div>
         <div className={s.buttonContainer}>
-          <button className={s.button} onClick={handleClick}>
+          <button
+            className={s.button}
+            disabled={!availableToClaim}
+            onClick={handleClick}
+          >
             Claim
           </button>
         </div>

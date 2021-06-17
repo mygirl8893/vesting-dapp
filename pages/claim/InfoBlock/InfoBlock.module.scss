@@ -61,6 +61,7 @@
   color: #d8dae0;
   font-weight: 600;
   padding: 12px;
+  min-height: 45px;
   text-align: center;
   background-color: #141415;
 
@@ -82,10 +83,21 @@
     font-size: 25px;
     background-color: #ffd300;
     cursor: pointer;
+    transition: .1s;
 
     &:hover {
       background-color: #ffeb86;
-      transition: .1s;
+    }
+
+    &:disabled,
+    &[disabled] {
+      background-color: #a7a28f;
+      color: #827e6f;
+
+      &:hover {
+        background-color: #a7a28f;
+        cursor: not-allowed;
+      }
     }
   }
 }
