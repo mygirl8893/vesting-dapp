@@ -17,30 +17,37 @@ type Form = {
     cliffDate: Date | null
   },
   error: string
+  success: boolean
+}
+
+const initialState = {
+  values: {
+    address: '',
+    amount: '',
+    startDate: null,
+    endDate: null,
+    cliffDate: null,
+  },
+  error: '',
+  success: false,
 }
 
 const SpreadForm: React.FunctionComponent = () => {
   const [ userAddress ] = useSelector(selectMetaMaskAccounts)
 
-  const [ form, changeForm ] = useState<Form>({
-    values: {
-      address: '',
-      amount: '',
-      startDate: null,
-      endDate: null,
-      cliffDate: null,
-    },
-    error: '',
-  })
+  const [ form, changeForm ] = useState<Form>(initialState)
+
+  const handleSetSuccess = (status: boolean) => changeForm((state) => ({ ...state, success: status }))
+  const handleSetError = (error: string) => changeForm((state) => ({ ...state, error }))
 
   const setFormValue = (name: string, value: Date | string) => {
     handleSetError('')
+    handleSetSuccess(false)
     changeForm((state) => ({
       ...state, values: { ...state.values, [name]: value }
     }))
   }
 
-  const handleSetError = (error: string) => changeForm((state) => ({ ...state, error }))
   const handleChangeAddress = (event: any) => setFormValue('address', event.target.value)
   const handleChangeAmount = (event: any) => setFormValue('amount', event.target.value)
   const handlechangeStartDate = (value: Date) => setFormValue('startDate', value)
@@ -90,11 +97,16 @@ const SpreadForm: React.FunctionComponent = () => {
       .on('error', (error: any) => {
         handleSetError(error?.message)
       })
+      .on('transactionHash', () => {
+        changeForm(initialState)
+        handleSetSuccess(true)
+      })
   }
 
   const isStartDateExist = Boolean(form.values.startDate)
   const isEndDateExist = Boolean(form.values.endDate)
   const startDate = new Date(form.values.startDate as Date)
+  const minDate = new Date(new Date().setDate(new Date().getDate() + 1))
 
   return (
     <div className={s.container}>
@@ -113,7 +125,7 @@ const SpreadForm: React.FunctionComponent = () => {
           <DatePicker
             wrapperClassName={s.datePicker}
             selected={form.values.startDate}
-            minDate={new Date()}
+            minDate={minDate}
             onChange={handlechangeStartDate}
           />
         </div>
@@ -122,7 +134,7 @@ const SpreadForm: React.FunctionComponent = () => {
           <DatePicker
             wrapperClassName={s.datePicker}
             selected={form.values.endDate}
-            minDate={new Date()}
+            minDate={minDate}
             maxDate={isStartDateExist ? new Date(startDate.setFullYear(startDate.getFullYear() + 1)) : null}
             disabled={!isStartDateExist}
             placeholderText={isStartDateExist ? '' : "Need to select start date"}
@@ -149,6 +161,13 @@ const SpreadForm: React.FunctionComponent = () => {
           </div>
         </div>
       </div>
+      {
+        Boolean(form.success) && (
+          <div className={s.successContainer}>
+            Transaction sent
+          </div>
+        )
+      }
       {
         Boolean(form.error) && (
           <div className={s.errorContainer}>

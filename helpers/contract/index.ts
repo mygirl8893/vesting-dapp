@@ -4,7 +4,7 @@ import ABI from './abi.json'
 
 
 const Contract = ContractInit as any
-const ADDRESS = "0x46B560b8C13105361c80b0272A7AbAaa5FdF9482"
+const ADDRESS = "0x555DfB930A641d23cb90cDbb5953690573d496Ab"
 
 let contractInstance: any = null
 
@@ -40,36 +40,41 @@ export const holdTokens = (values: HoldTokensInput) => {
     .send({ from })
 }
 
-
 export type Info = {
-  totalTokens: string
+  totalTokens: number
   startDate: Date
   endDate: Date
-  alreadyClaimed: string
+  alreadyClaimed: number
+  remainingToVest: number
+  availableToClaim: number
+  alreadyVested: number
 }
 
-export const getInfo = (address: string): Promise<Info> => {
+export const getInfo = (address: string): Promise<Info | null> => {
   const contract = _getContract()
 
   return Promise.all([
     contract.methods.recipients(address).call(),
-    // contract.methods.getAvailableBalance(address).call(),
+    contract.methods.getAvailableBalance(address).call(),
   ])
-    .then(([ info ]) => {
-      console.log('info', info)
-
-      if (info?.amount) {
+    .then(([ info, balance ]) => {
+      if (info?.amount !== '0') {
         const { amount, vestingBegin, vestingEnd, claimed } = info
 
+        const alreadyVested = Number(balance) + Number(claimed)
+
         return {
-          totalTokens: amount,
+          totalTokens: Number(amount),
           startDate: new Date(vestingBegin * 1000),
           endDate: new Date(vestingEnd * 1000),
-          alreadyClaimed: claimed,
+          alreadyClaimed: Number(claimed),
+          alreadyVested,
+          availableToClaim: Number(balance),
+          remainingToVest: Number(amount) - alreadyVested,
         }
       }
 
-      return Promise.reject()
+      return null
     })
 }
 
@@ -78,6 +83,3 @@ export const claim = (address: string): Promise<any> => {
 
   return contract.methods.claim(address).call()
 }
-
-
-

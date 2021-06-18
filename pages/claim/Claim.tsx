@@ -27,6 +27,20 @@ const Claim: React.FunctionComponent = () => {
   }) 
 
   useEffect(() => {
+    if (!state.isFetching) {
+      setState((state) => ({
+        ...state,
+        isFetching: true,
+      }))
+    }
+
+    if (state.error){
+      setState((state) => ({
+        ...state,
+        error: null,
+      }))
+    }
+
     getInfo(address)
       .then((data) => {
         setState((state) => ({
@@ -54,7 +68,12 @@ const Claim: React.FunctionComponent = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <InfoBlock {...state.data} />
+      <InfoBlock
+        address={address}
+        error={state.error as string}
+        isFetching={state.isFetching}
+        data={state.data as Info}
+      />
     </div>
   )
 }

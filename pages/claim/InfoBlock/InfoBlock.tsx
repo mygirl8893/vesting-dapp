@@ -1,17 +1,14 @@
+import type { Info } from 'helpers/contract'
 import { claim } from 'helpers/contract'
 
 import s from './InfoBlock.module.scss'
 
-// TODO - remove any
-type InfoBlock = any | {
+
+type InfoBlock = {
+  data: Info
+  error: string
   address: string
-  startDate: Date
-  endDate: Date
-  vested: number
-  remainingToVest: number
-  availableToClaim: number
-  alreadyClaimed: number
-  totalTokens: number
+  isFetching: boolean
 }
 
 const formatDate = (date: Date) => {
@@ -30,11 +27,11 @@ const formatDate = (date: Date) => {
   return ''
 }
 
+const numberFormat = new Intl.NumberFormat("en-EN")
+
 const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
-  const {
-    address, startDate, endDate, vested, remainingToVest,
-    availableToClaim, alreadyClaimed, totalTokens,
-  } = props
+  const { address, data, error, isFetching } = props
+  const { startDate, endDate, alreadyVested, remainingToVest, availableToClaim, alreadyClaimed, totalTokens } = data || {}
 
   const handleClick = () => {
     claim(address)
@@ -42,6 +39,102 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
         console.log(error)
       })
   }
+
+  const content = (() => {
+    if (isFetching) {
+      return (
+        <div className={s.infoText}>
+          Loading...
+        </div>
+      )
+    }
+
+    if (!isFetching && !data) {
+      return (
+        <div className={s.infoText}>
+          No information on this address
+        </div>
+      )
+    }
+
+    if (error) {
+      return (
+        <div className={s.error}>
+          Error: {error}
+        </div>
+      )
+    }
+
+    return (
+      <div className={s.infoContainer}>
+        <div className={s.box}>
+          <div className={s.boxTitle}>
+            Start date
+          </div>
+          <div className={s.boxContent}>
+            {formatDate(startDate as Date)}
+          </div>
+        </div>
+        <div className={s.box}>
+          <div className={s.boxTitle}>
+            End date
+          </div>
+          <div className={s.boxContent}>
+            {formatDate(endDate as Date)}
+          </div>
+        </div>
+        <div className={s.box}>
+          <div className={s.boxTitle}>
+            Already vested
+          </div>
+          <div className={s.boxContent}>
+            {numberFormat.format(alreadyVested)}
+          </div>
+        </div>
+        <div className={s.box}>
+          <div className={s.boxTitle}>
+            Remaining to vest
+          </div>
+          <div className={s.boxContent}>
+            {numberFormat.format(remainingToVest)}
+          </div>
+        </div>
+        <div className={s.box}>
+          <div className={s.boxTitle}>
+            Already claimed
+          </div>
+          <div className={s.boxContent}>
+            {numberFormat.format(alreadyClaimed)}
+          </div>
+        </div>
+        <div className={s.box}>
+          <div className={s.boxTitle}>
+            Total tokens
+          </div>
+          <div className={s.boxContent}>
+            {numberFormat.format(totalTokens)}
+          </div>
+        </div>
+        <div className={s.box}>
+          <div className={`${s.boxTitle} ${s.accent}`}>
+            Available to claim
+          </div>
+          <div className={`${s.boxContent} ${s.accent}`}>
+            {numberFormat.format(availableToClaim)}
+          </div>
+        </div>
+        <div className={s.buttonContainer}>
+          <button
+            className={s.button}
+            disabled={!availableToClaim}
+            onClick={handleClick}
+          >
+            Claim
+          </button>
+        </div>
+      </div>
+    )
+  })()
 
   return (
     <div className={s.container}>
@@ -56,73 +149,7 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
           {address}
         </div>
       </div>
-      <div className={s.infoContainer}>
-        <div className={s.box}>
-          <div className={s.boxTitle}>
-            Start date
-          </div>
-          <div className={s.boxContent}>
-            {formatDate(startDate)}
-          </div>
-        </div>
-        <div className={s.box}>
-          <div className={s.boxTitle}>
-            End date
-          </div>
-          <div className={s.boxContent}>
-            {formatDate(endDate)}
-          </div>
-        </div>
-        <div className={s.box}>
-          <div className={s.boxTitle}>
-            Already vested
-          </div>
-          <div className={s.boxContent}>
-            {vested}
-          </div>
-        </div>
-        <div className={s.box}>
-          <div className={s.boxTitle}>
-            Remaining to vest
-          </div>
-          <div className={s.boxContent}>
-            {remainingToVest}
-          </div>
-        </div>
-        <div className={s.box}>
-          <div className={s.boxTitle}>
-            Already claimed
-          </div>
-          <div className={s.boxContent}>
-            {alreadyClaimed}
-          </div>
-        </div>
-        <div className={s.box}>
-          <div className={s.boxTitle}>
-            Total tokens
-          </div>
-          <div className={s.boxContent}>
-            {totalTokens}
-          </div>
-        </div>
-        <div className={s.box}>
-          <div className={`${s.boxTitle} ${s.accent}`}>
-            Available to claim
-          </div>
-          <div className={`${s.boxContent} ${s.accent}`}>
-            {availableToClaim}
-          </div>
-        </div>
-        <div className={s.buttonContainer}>
-          <button
-            className={s.button}
-            disabled={!availableToClaim}
-            onClick={handleClick}
-          >
-            Claim
-          </button>
-        </div>
-      </div>
+      {content}
     </div>
   )
 }
