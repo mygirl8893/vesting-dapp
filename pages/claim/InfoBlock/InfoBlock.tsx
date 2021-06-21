@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { Info } from 'helpers/contract'
 import { claim } from 'helpers/contract'
 
@@ -27,16 +28,29 @@ const formatDate = (date: Date) => {
   return ''
 }
 
-const numberFormat = new Intl.NumberFormat("en-EN")
-
 const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
   const { address, data, error, isFetching } = props
-  const { startDate, endDate, alreadyVested, remainingToVest, availableToClaim, alreadyClaimed, totalTokens } = data || {}
+
+  const { startDate, endDate, alreadyVested, remainingToVest,
+    availableToClaim, alreadyClaimed, totalTokens } = data || {}
+
+  const [ claimError, setClaimError ] = useState(null)
+  const [ claimFetching, setClaimFetching ] = useState(false)
 
   const handleClick = () => {
+    setClaimError(null)
+
     claim(address)
-      .catch((error) => {
-        console.log(error)
+      // @ts-ignore
+      .on('transactionHash', () => {
+        setClaimFetching(true)
+      })
+      .on('confirmation', () => {
+        window.location.reload()
+      })
+      .catch((error: any) => {
+        setClaimFetching(false)
+        setClaimError(error.message)
       })
   }
 
@@ -88,7 +102,7 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
             Already vested
           </div>
           <div className={s.boxContent}>
-            {numberFormat.format(alreadyVested)}
+            {alreadyVested}
           </div>
         </div>
         <div className={s.box}>
@@ -96,7 +110,7 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
             Remaining to vest
           </div>
           <div className={s.boxContent}>
-            {numberFormat.format(remainingToVest)}
+            {remainingToVest}
           </div>
         </div>
         <div className={s.box}>
@@ -104,7 +118,7 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
             Already claimed
           </div>
           <div className={s.boxContent}>
-            {numberFormat.format(alreadyClaimed)}
+            {alreadyClaimed}
           </div>
         </div>
         <div className={s.box}>
@@ -112,7 +126,7 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
             Total tokens
           </div>
           <div className={s.boxContent}>
-            {numberFormat.format(totalTokens)}
+            {totalTokens}
           </div>
         </div>
         <div className={s.box}>
@@ -120,13 +134,13 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
             Available to claim
           </div>
           <div className={`${s.boxContent} ${s.accent}`}>
-            {numberFormat.format(availableToClaim)}
+            {availableToClaim}
           </div>
         </div>
         <div className={s.buttonContainer}>
           <button
             className={s.button}
-            disabled={!availableToClaim}
+            disabled={availableToClaim === '0' || claimFetching}
             onClick={handleClick}
           >
             Claim
@@ -150,6 +164,22 @@ const InfoBlock: React.FunctionComponent<InfoBlock> = (props) => {
         </div>
       </div>
       {content}
+      {
+        Boolean(claimError || claimFetching) && (
+          <div className={s.notifications}>
+            {
+              claimFetching && (
+                <div className={s.loadingNotification}>Loading...</div>
+              )
+            }
+            {
+              claimError && (
+                <div className={s.errorNotification}>{claimError}</div>
+              )
+            }
+          </div>
+        )
+      }
     </div>
   )
 }

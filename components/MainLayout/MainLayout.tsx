@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import MetaMaskOnboarding from '@metamask/onboarding'
+import { setProvider } from 'helpers//contract'
 import { setMetaMaskData, setMetaMaskNeedApproval, setMetaMaskConnectionError } from 'redux/main'
 
 import Header from './Header/Header'
@@ -35,6 +36,7 @@ const MainLayout: React.FunctionComponent = ({ children }) => {
         })
 
       window.ethereum.on('accountsChanged', handleNewAccounts)
+      window.ethereum.on('chainChanged', () => setProvider())
 
       return () => {
         if (typeof window.ethereum.off === 'function') {

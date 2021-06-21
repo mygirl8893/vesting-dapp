@@ -1,4 +1,5 @@
 import ContractInit from 'web3-eth-contract'
+import bn from 'helpers/bn'
 
 import ABI from './abi.json'
 
@@ -17,6 +18,12 @@ const _getContract = () => {
   contractInstance = new Contract(ABI, ADDRESS)
 
   return contractInstance
+}
+
+export const setProvider = () => {
+  const contract = _getContract()
+
+  contract.setProvider(window.web3.currentProvider)
 }
 
 type HoldTokensInput = {
@@ -41,13 +48,13 @@ export const holdTokens = (values: HoldTokensInput) => {
 }
 
 export type Info = {
-  totalTokens: number
+  totalTokens: string
   startDate: Date
   endDate: Date
-  alreadyClaimed: number
-  remainingToVest: number
-  availableToClaim: number
-  alreadyVested: number
+  alreadyClaimed: string
+  remainingToVest: string
+  availableToClaim: string
+  alreadyVested: string
 }
 
 export const getInfo = (address: string): Promise<Info | null> => {
@@ -61,16 +68,18 @@ export const getInfo = (address: string): Promise<Info | null> => {
       if (info?.amount !== '0') {
         const { amount, vestingBegin, vestingEnd, claimed } = info
 
-        const alreadyVested = Number(balance) + Number(claimed)
+        const alreadyVested = bn.add(balance, claimed)
+        const remainingToVest = bn.subtract(amount, alreadyVested)
 
         return {
-          totalTokens: Number(amount),
-          startDate: new Date(vestingBegin * 1000),
+          // need to get millisecond
           endDate: new Date(vestingEnd * 1000),
-          alreadyClaimed: Number(claimed),
-          alreadyVested,
-          availableToClaim: Number(balance),
-          remainingToVest: Number(amount) - alreadyVested,
+          startDate: new Date(vestingBegin * 1000),
+          totalTokens: bn.getValueFromBN(amount),
+          alreadyClaimed: bn.getValueFromBN(claimed),
+          alreadyVested: bn.getValueFromBN(alreadyVested),
+          availableToClaim: bn.getValueFromBN(balance),
+          remainingToVest: bn.getValueFromBN(remainingToVest),
         }
       }
 
@@ -81,5 +90,5 @@ export const getInfo = (address: string): Promise<Info | null> => {
 export const claim = (address: string): Promise<any> => {
   const contract = _getContract()
 
-  return contract.methods.claim(address).call()
+  return contract.methods.claim(address).send({ from: address })
 }

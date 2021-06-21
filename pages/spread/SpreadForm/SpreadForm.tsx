@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker'
 import { useSelector } from 'react-redux'
 import { holdTokens } from 'helpers/contract'
 import { selectMetaMaskAccounts } from 'redux/main'
+import bn from 'helpers/bn'
 
 import s from './SpreadForm.module.scss'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -18,6 +19,7 @@ type Form = {
   },
   error: string
   success: boolean
+  isFetching: boolean
 }
 
 const initialState = {
@@ -30,6 +32,7 @@ const initialState = {
   },
   error: '',
   success: false,
+  isFetching: false,
 }
 
 const SpreadForm: React.FunctionComponent = () => {
@@ -37,6 +40,7 @@ const SpreadForm: React.FunctionComponent = () => {
 
   const [ form, changeForm ] = useState<Form>(initialState)
 
+  const handleSetFetching = (status: boolean) => changeForm((state) => ({ ...state, isFetching: status }))
   const handleSetSuccess = (status: boolean) => changeForm((state) => ({ ...state, success: status }))
   const handleSetError = (error: string) => changeForm((state) => ({ ...state, error }))
 
@@ -57,7 +61,7 @@ const SpreadForm: React.FunctionComponent = () => {
   const handleSumbit = () => {
     const hasEmpty = !Object.values(form.values).every(Boolean)
     const incorrectAddress = !/^0x[a-fA-F0-9]{40}$/.test(form.values.address)
-    const incorrectAmountCount = form.values.amount && +form.values.amount < 0.00001 // need to change this value
+    const incorrectAmountCount = form.values.amount && +form.values.amount < 0.00001
     const incorrectAmountValue = form.values.amount && !/[0-9\.]/.test(form.values.amount)
 
     if (form.error) {
@@ -73,7 +77,7 @@ const SpreadForm: React.FunctionComponent = () => {
     }
 
     if (incorrectAmountCount) {
-      return handleSetError('Amount must be greater than 0.00001 ETH')
+      return handleSetError('Amount must be greater than 0.00001')
     }
 
     if (incorrectAmountValue) {
@@ -84,21 +88,29 @@ const SpreadForm: React.FunctionComponent = () => {
 
     const getSeconds = (date: Date): number => parseInt(String(new Date(date).getTime() / 1000))
 
+    handleSetFetching(true)
+
     holdTokens({
       from: userAddress,
       params: {
         address,
-        amount,
+        amount: bn.getAmount(amount),
         startDate: getSeconds(startDate as Date),
         endDate: getSeconds(endDate as Date),
         cliffDate: getSeconds(cliffDate as Date),
+        // For test:
+        // startDate: getSeconds(new Date("Jun 22 2021 01:53:00") as Date),
+        // cliffDate: getSeconds(new Date("Jun 22 2021 01:54:50") as Date),
+        // endDate: getSeconds(new Date("Jun 22 2021 01:56:50") as Date),
       },
     })
       .on('error', (error: any) => {
         handleSetError(error?.message)
+        handleSetFetching(false)
       })
-      .on('transactionHash', () => {
+      .on('confirmation', () => {
         changeForm(initialState)
+        handleSetFetching(false)
         handleSetSuccess(true)
       })
   }
@@ -161,20 +173,29 @@ const SpreadForm: React.FunctionComponent = () => {
           </div>
         </div>
       </div>
-      {
-        Boolean(form.success) && (
-          <div className={s.successContainer}>
-            Transaction sent
-          </div>
-        )
-      }
-      {
-        Boolean(form.error) && (
-          <div className={s.errorContainer}>
-            {form.error}
-          </div>
-        )
-      }
+      <div className={s.statusContainer}>
+        {
+          Boolean(form.isFetching) && (
+            <div className={s.loading}>
+              Loading...
+            </div>
+          )
+        }
+        {
+          Boolean(form.success) && (
+            <div className={s.success}>
+              Transaction sent
+            </div>
+          )
+        }
+        {
+          Boolean(form.error) && (
+            <div className={s.error}>
+              {form.error}
+            </div>
+          )
+        }
+      </div>
     </div>
   )
 }

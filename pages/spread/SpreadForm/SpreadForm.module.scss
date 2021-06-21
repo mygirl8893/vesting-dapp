@@ -70,18 +70,22 @@
   padding-bottom: 2px;
 }
 
-.errorContainer {
+.statusContainer {
   margin-top: 10px;
   font-size: 16px;
-  color: #ff8888;
   text-align: center;
 }
 
-.successContainer {
-  margin-top: 10px;
-  font-size: 16px;
+.error {
+  color: #ff8888;
+}
+
+.success {
   color: #88ffb0;
-  text-align: center;
+}
+
+.loading {
+  color: #ffd300;
 }
 
 .button {
