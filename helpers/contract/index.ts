@@ -5,7 +5,7 @@ import ABI from './abi.json'
 
 
 const Contract = ContractInit as any
-const ADDRESS = "0x555DfB930A641d23cb90cDbb5953690573d496Ab"
+const ADDRESS = "0x071bB7B930d9864c1c3FFafFb0f31739f5Fd8ce3"
 
 let contractInstance: any = null
 
