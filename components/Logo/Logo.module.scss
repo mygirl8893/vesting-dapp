@@ -1,5 +1,21 @@
 .logo {
-  font-size: 32px;
-  font-weight: 600;
-  color: #ffd300;
+  display: block;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+
+@include mobile {
+
+}
+
+@include except-mobile {
+
+  .logo {
+    width: 110px;
+    height: 24px;
+  }
 }

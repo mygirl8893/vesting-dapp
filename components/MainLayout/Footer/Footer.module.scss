@@ -1,16 +1,16 @@
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1344px;
-  margin: 0 auto;
-  padding: 16px;
+.footer {
+  opacity: 0.8;
+  color: #fff;
 }
 
-@media (max-width: 500px) {
+
+@include except-mobile {
+
+  .footer {
+    padding: 20px 0;
+  }
 
   .copy {
-    width: 180px;
-    text-align: right;
+    font-size: 12px;
   }
 }

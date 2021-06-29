@@ -1,24 +1,10 @@
 .container {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  grid-template-columns: 1fr;
-  grid-template-rows: 70px 1fr 150px;
-  grid-template-areas:
-    "header"
-    "content"
-    "footer";
-}
-
-.header {
-  display: block;
-  grid-area: header;
 }
 
 .content {
-  display: block;
-  grid-area: content;
-}
-
-.footer {
-  grid-area: footer;
+  flex: 1 1 auto;
+  min-height: 1px;
 }

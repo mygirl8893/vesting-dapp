@@ -4,12 +4,15 @@ import s from './Footer.module.scss'
 
 
 const Footer: React.FunctionComponent = () => (
-  <div className={s.container}>
-    <Logo />
-    <div className={s.copy}>
-      &copy; 2021, Crypto Project. All Rights Reserved.
+  <footer className={s.footer}>
+    <div className="width-container flex items-center justify-between">
+      <div />
+      <div className={s.copy}>
+        &copy; 2021, Crypto Project. All Rights Reserved.
+      </div>
+      <div />
     </div>
-  </div>
+  </footer>
 )
 
 

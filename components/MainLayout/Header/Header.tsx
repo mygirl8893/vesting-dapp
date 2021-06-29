@@ -1,21 +1,24 @@
-import { useSelector } from 'react-redux'
-import { selectMetaMaskFlags } from 'redux/main'
+import { useWeb3React } from '@web3-react/core'
 
 import Logo from 'components/Logo/Logo'
 
 import Menu from './Menu/Menu'
+import WalletButton from './WalletButton/WalletButton'
 
 import s from './Header.module.scss'
 
 
 const Header: React.FunctionComponent = () => {
-  const { isMetaMaskConnected } = useSelector(selectMetaMaskFlags)
+  const { account } = useWeb3React()
 
   return (
-    <div className={s.container}>
-      <Logo className={s.logo}/>
-      {isMetaMaskConnected && <Menu />}
-    </div>
+    <header className={s.header}>
+      <div className="width-container flex items-center justify-between">
+        <Logo className={s.logo}/>
+        {account && <Menu />}
+        <WalletButton />
+      </div>
+    </header>
   )
 }
 
