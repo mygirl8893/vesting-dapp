@@ -1,0 +1,102 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background: rgba(#000, 0.05);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding: 16px;
+  animation: openOverlay 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);;
+
+  &.mounted {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+.modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  // background-color: var(--color-5);
+  background: linear-gradient(170.61deg, #1f2127 -0.42%, #1E303B 135.98%);
+  border: 1px solid #1e2f3a;
+  color: #fff;
+  width: 600px;
+  min-height: 50px;
+  padding: 32px;
+  border-radius: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+.info {
+  color: black;
+  margin-top: 20px;
+  border-radius: 12px;
+  padding: 16px;
+  background: linear-gradient(90deg, #ffd300, #ffb01e);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  span {
+    display: block;
+    font-size: 12px;
+  }
+
+  b {
+    display: block;
+    margin-top: 4px;
+    font-size: 18px;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.account {
+  margin-top: 20px;
+  font-size: 12px;
+  padding: 8px;
+  text-align: center;
+  background: #000;
+  border-radius: 12px;
+}
+
+.controlls {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.action {
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+@keyframes openOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
