@@ -24,3 +24,4 @@ const getContract = <T>(library, address, abi): T => {
 }
 
 export const getVestingContract = (library): Vesting => getContract(library, vestingAddress, vestingAbi)
+export const getTokenContract = (library): Token => getContract(library, tokenAddress, tokenAbi)

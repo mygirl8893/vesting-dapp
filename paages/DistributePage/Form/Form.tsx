@@ -3,7 +3,7 @@ import { Form as FormularForm, useForm, useFieldState } from 'formular'
 import { parseUnits } from '@ethersproject/units'
 import DatePicker from 'react-datepicker'
 import { useWeb3React } from '@web3-react/core'
-import { tokenContract, getVestingContract } from 'contracts'
+import { getTokenContract, getVestingContract } from 'contracts'
 import { useReducerState } from 'hooks'
 
 import s from './Form.module.scss'
@@ -161,6 +161,9 @@ const Form: React.FunctionComponent = () => {
     }*/
 
     try {
+      const tokenContract = getTokenContract(library)
+      const vestingContract = getVestingContract(library)
+
       const tokenDecimals = await tokenContract.decimals()
 
       let { address, amount, startDate, endDate, cliffDate } = values
@@ -169,8 +172,6 @@ const Form: React.FunctionComponent = () => {
       endDate = getSeconds(endDate) as any
       cliffDate = getSeconds(cliffDate) as any
       amount = parseUnits(amount, tokenDecimals) as any
-
-      const vestingContract = getVestingContract(library)
 
       setState({ isFetching: true })
 
