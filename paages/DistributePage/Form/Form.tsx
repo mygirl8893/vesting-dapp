@@ -170,8 +170,6 @@ const Form: React.FunctionComponent = () => {
       cliffDate = getSeconds(cliffDate) as any
       amount = parseUnits(amount, tokenDecimals) as any
 
-      console.log(11, amount.toString())
-
       const vestingContract = getVestingContract(library)
 
       setState({ isFetching: true })
@@ -186,7 +184,7 @@ const Form: React.FunctionComponent = () => {
     }
     catch (err) {
       console.error(err)
-      alert('Something went wrong!')
+      alert('Something went wrong! :(')
     }
   }
 
