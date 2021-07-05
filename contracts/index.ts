@@ -9,6 +9,7 @@ import tokenAbi from './token.json'
 
 const provider = typeof window !== 'undefined' && window.ethereum ? new Web3Provider(window.ethereum) : new InfuraProvider('rinkeby')
 
+export const ownerAddress = '0x79fcb05Bbf72fA720120154905D98390b9130C0E'
 export const tokenAddress = '0x8229439261B51eC0a8f0252397A0A1096A725316'
 export const vestingAddress = '0x071bB7B930d9864c1c3FFafFb0f31739f5Fd8ce3'
 

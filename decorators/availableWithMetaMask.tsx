@@ -1,10 +1,11 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { useWeb3React } from '@web3-react/core'
+import { ownerAddress } from 'contracts'
 
-type AvailableWithMetaMask = <T>(ComposedComponent: any) => React.FunctionComponent<T>
+type AvailableWithMetaMask = <T>(ComposedComponent: any, ownerOnly?: boolean) => React.FunctionComponent<T>
 
-const availableWithMetaMask: AvailableWithMetaMask = (ComposedComponent?) => {
+const availableWithMetaMask: AvailableWithMetaMask = (ComposedComponent?, ownerOnly?) => {
 
   const WrappedComponent = (props: any) => {
     const router = useRouter()
@@ -15,6 +16,10 @@ const availableWithMetaMask: AvailableWithMetaMask = (ComposedComponent?) => {
     //
     //   return null
     // }
+
+    if (ownerOnly && account !== ownerAddress) {
+      return null
+    }
 
     return (
       <ComposedComponent {...props} />
