@@ -10,8 +10,8 @@ import tokenAbi from './token.json'
 const provider = typeof window !== 'undefined' && window.ethereum ? new Web3Provider(window.ethereum) : new InfuraProvider('rinkeby')
 
 export const ownerAddress = '0x79fcb05Bbf72fA720120154905D98390b9130C0E'
-export const tokenAddress = '0x8229439261B51eC0a8f0252397A0A1096A725316'
-export const vestingAddress = '0x071bB7B930d9864c1c3FFafFb0f31739f5Fd8ce3'
+export const tokenAddress = '0xEcF259aA3Fb1123DC41B8426F72452F1674678b8'
+export const vestingAddress = '0x79355218ff8CDe92972d5bbAD45c5Dd9Aae121Cc'
 
 export const tokenContract = new Contract(tokenAddress, tokenAbi, provider) as unknown as Token
 export const vestingContract = new Contract(vestingAddress, vestingAbi, provider) as unknown as Vesting
