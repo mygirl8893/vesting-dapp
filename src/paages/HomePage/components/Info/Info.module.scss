@@ -1,0 +1,44 @@
+.info {
+  border: 1px solid #306a70;
+  padding: 16rem 20rem;
+  background-color: rgba(26, 31, 38, 0.3);
+  box-shadow: #2a595e 0 2px 10px;
+  border-radius: 8rem;
+}
+
+.title {
+  color: #fff;
+  font-weight: 600;
+  font-size: 18rem;
+  line-height: 28rem;
+}
+
+.dates {
+  color: #8E9DB1;
+  font-weight: 600;
+  font-size: 14rem;
+  line-height: 18rem;
+}
+
+.connectButton {
+  display: block;
+  width: 280rem;
+  height: 38rem;
+  margin: 40rem auto 0;
+  border: 0;
+  font-weight: 600;
+  color: #4D5A6A;
+  font-size: 12rem;
+  text-align: center;
+  text-transform: uppercase;
+  background: none;
+  background-color: #F6F9FB;
+  cursor: pointer;
+  border-radius: 6rem;
+
+  &:disabled {
+    color: #4D5A6A;
+    background-color: #323842;
+    cursor: not-allowed;
+  }
+}

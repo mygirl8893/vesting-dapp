@@ -1,0 +1,23 @@
+$sizes: (16, 20, 24, 32, 40, 56);
+
+
+.icon {
+  vertical-align: text-bottom;
+}
+
+.other\/primary-logo {
+  width: 120rem;
+  height: 27rem;
+}
+
+.other\/secondary-logo {
+  width: 110rem;
+  height: 24rem;
+}
+
+@each $size in $sizes {
+  .size-#{$size} {
+    width: safe($size);
+    height: safe($size);
+  }
+}

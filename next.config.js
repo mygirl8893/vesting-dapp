@@ -1,10 +1,11 @@
+const path = require('path')
+
+
 module.exports = {
   sassOptions: {
-    additionalData: `@import '~styles/index.scss';`,
+    additionalData: `@import '~src/scss/index.scss';`,
     includePaths: [
-      './components',
-      './pages',
-      './styles',
+      path.join(__dirname, 'styles'),
     ],
   },
 }

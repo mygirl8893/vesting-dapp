@@ -7,6 +7,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "jsx": "preserve",
     "module": "esnext",
     "moduleResolution": "node",
     "allowJs": true,
@@ -17,10 +18,28 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "downlevelIteration": true,
+    "paths": {
+      "classnames": [ "node_modules/classnames" ],
+
+      "web3": [ "local_modules/web3" ],
+      "state": [ "local_modules/state" ],
+      "modal": [ "local_modules/modal" ],
+      "notifications": [ "local_modules/notifications" ],
+      "event-aggregator": [ "local_modules/event-aggregator" ],
+
+      "compositions/*": [ "src/compositions/*" ],
+      "components/*": [ "src/components/*" ],
+      "paages/*": [ "src/paages/*" ],
+      "helpers": [ "src/helpers" ],
+      "helpers/*": [ "src/helpers/*" ],
+      "hooks": [ "src/hooks" ],
+      "contracts": [ "src/contracts" ]
+    }
   },
   "include": [
     "next-env.d.ts",
+    "additional.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ],

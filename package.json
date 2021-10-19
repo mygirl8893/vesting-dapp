@@ -1,45 +1,36 @@
 {
-  "name": "crypto-project",
+  "name": "cpool-staking",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "npm run typechain",
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev -p 5010",
+    "build": "npm run typechain & next build",
     "start": "next start",
-    "typechain": "typechain --target ethers-v5 --out-dir ./contracts/types './contracts/*.json'"
+    "typechain": "typechain --target ethers-v5 --out-dir ./src/contracts/types './src/contracts/abis/*.json'"
   },
   "dependencies": {
-    "@ethersproject/bignumber": "^5.4.0",
-    "@ethersproject/contracts": "^5.4.0",
-    "@ethersproject/providers": "^5.4.0",
-    "@ethersproject/units": "^5.4.0",
-    "@headlessui/react": "^1.3.0",
-    "@metamask/onboarding": "^1.0.0",
-    "@reduxjs/toolkit": "^1.6.0",
+    "@ethersproject/contracts": "^5.4.1",
+    "@ethersproject/providers": "^5.4.5",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
-    "bignumber.js": "^9.0.1",
-    "classnames": "^2.3.1",
-    "ethers": "^5.4.0",
+    "@web3-react/walletconnect-connector": "^6.2.4",
+    "dayjs": "^1.10.7",
+    "ethers": "^5.4.7",
     "formular": "^3.0.1",
-    "next": "10.2.3",
-    "react": "17.0.2",
-    "react-datepicker": "^4.1.1",
-    "react-dom": "17.0.2",
-    "react-modal": "^3.14.2",
-    "react-redux": "^7.2.4",
-    "redux": "^4.1.0",
-    "redux-thunk": "^2.3.0",
-    "sass": "^1.34.1",
-    "web3-eth-contract": "^1.3.6"
+    "next": "^11.1.2",
+    "react": "^17.0.2",
+    "react-date-picker": "^8.3.4",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@typechain/ethers-v5": "^7.0.1",
-    "@types/react": "17.0.9",
-    "@types/react-datepicker": "^3.1.8",
-    "@types/react-modal": "^3.12.0",
-    "typechain": "^5.1.1",
-    "typescript": "^4.3.4"
+    "@typechain/ethers-v5": "^7.1.2",
+    "@types/react": "17.0.19",
+    "eslint": "7.32.0",
+    "sass": "^1.39.0",
+    "stylelint": "^13.13.1",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-scss": "^3.20.1",
+    "typechain": "^5.1.2",
+    "typescript": "4.4.2"
   }
 }

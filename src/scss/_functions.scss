@@ -1,0 +1,3 @@
+@function safe($value) {
+  @return var(--size-#{$value});
+}

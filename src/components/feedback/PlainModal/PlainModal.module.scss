@@ -1,0 +1,126 @@
+@keyframes openModal {
+  0% {
+    transform: translate3d(0, 50%, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+.container {
+  animation: openModal 0.35s ease;
+}
+
+.plainModal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #2A3039;
+
+  &.whiteBg {
+    background-color: #fff;
+  }
+
+  &,
+  &:focus {
+    outline: none;
+  }
+}
+
+.closeButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20rem;
+  height: 20rem;
+  vertical-align: top;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &::before {
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    bottom: -50%;
+    left: -50%;
+    margin: auto;
+    content: '';
+  }
+}
+
+.icon {
+  flex: none;
+  width: 16rem;
+  height: 16rem;
+}
+
+.closeButton {
+  position: absolute !important;
+  top: 16rem;
+  right: 16rem;
+  z-index: 10;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.23s ease;
+
+  &.black {
+    color: #000;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+}
+
+
+@include mobile {
+
+  .container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .plainModal {
+    width: 100%;
+    min-height: 100%;
+    padding: 40rem 20rem 56rem;
+  }
+}
+
+@include except-mobile {
+
+  .overlay {
+    display: grid;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    padding: 16rem;
+  }
+
+  .plainModal {
+    width: 504rem;
+    padding: 40rem 32rem 56rem;
+    border-radius: 16rem;
+  }
+}

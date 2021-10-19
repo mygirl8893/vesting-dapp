@@ -1,0 +1,40 @@
+.content {
+  position: relative;
+  z-index: 10;
+}
+
+.headline {
+  margin-bottom: 36rem;
+  padding: 0 16rem;
+}
+
+.title {
+  color: #fff;
+  font-weight: 600;
+  font-size: 24rem;
+  line-height: 36rem;
+}
+
+.text {
+  color: #8E9DB1;
+  font-weight: 600;
+  font-size: 16rem;
+  line-height: 22rem;
+}
+
+
+@include mobile {
+
+  .content {
+    padding: 100rem 20rem;
+  }
+}
+
+@include except-mobile {
+
+  .content {
+    max-width: 560rem;
+    margin: 0 auto;
+    padding: 140rem 0;
+  }
+}

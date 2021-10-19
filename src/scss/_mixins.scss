@@ -1,0 +1,42 @@
+// Focus
+
+@mixin focus-shadow {
+  border-color: #0f77ff;
+  box-shadow: 0 0 4rem 2px rgba(15, 119, 255, 0.8);
+}
+
+@mixin mouse-focus {
+  :global(.js-focus-visible) &:focus:not(:global(.focus-visible)) {
+    @content;
+  }
+}
+
+@mixin keyboard-focus {
+  :global(.js-focus-visible) &:global(.focus-visible):focus {
+    @content;
+  }
+}
+
+
+@mixin basic-transition($property: all) {
+  transition: $property 0.23s $ease-in-out-quadratic;
+}
+
+@mixin no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  & {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
+@mixin placeholder {
+  &::placeholder { @content; }
+  &::-webkit-input-placeholder { @content; }
+  &:-moz-placeholder { @content; }
+  &::-moz-placeholder { @content; }
+  &:-ms-input-placeholder { @content; }
+}

@@ -1,0 +1,90 @@
+.stats {
+  margin-top: 24rem;
+
+  @include except-mobile {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.divider {
+  align-self: stretch;
+  width: 1px;
+  min-height: 100%;
+  background-color: #2a595e;
+}
+
+.stat {
+  width: calc(100% / 3 - 2px);
+  text-align: center;
+
+  @include mobile {
+    margin-top: 20rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  @include except-mobile {
+    padding: 0 20rem;
+  }
+
+  > .spinner {
+    display: inline-block;
+    vertical-align: top;
+    height: 24rem;
+    margin: 6rem 0;
+
+    img {
+      display: block;
+      width: 24rem;
+    }
+  }
+}
+
+.title {
+  margin-bottom: 8rem;
+  color: #8E9DB1;
+  font-size: 12rem;
+  line-height: 16rem;
+}
+
+.value {
+  font-weight: 600;
+  font-size: 18rem;
+  line-height: 28rem;
+}
+
+.claimButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 280rem;
+  height: 38rem;
+  margin: 40rem auto 0;
+  border: 0;
+  font-weight: 600;
+  color: #4D5A6A;
+  font-size: 12rem;
+  text-align: center;
+  text-transform: uppercase;
+  background: none;
+  background-color: #F6F9FB;
+  cursor: pointer;
+  border-radius: 6rem;
+
+  img {
+    display: block;
+    width: 10rem;
+    margin-top: 2rem;
+    margin-left: 8rem;
+    vertical-align: top;
+    filter: invert(1);
+  }
+
+  &.disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+}

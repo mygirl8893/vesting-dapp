@@ -1,0 +1,25 @@
+@keyframes openOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: $layer-modal - 1;
+  width: 100%;
+  height: 100%;
+  background: rgba(#000, 0.05);
+  backdrop-filter: blur(5rem);
+  animation: openOverlay 0.3s $ease-in-out-quadratic;
+
+  &.mounted {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}

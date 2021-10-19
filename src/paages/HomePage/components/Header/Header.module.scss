@@ -1,0 +1,89 @@
+.header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+
+  @include mobile {
+    flex-direction: column;
+    padding: 40rem 16rem 0;
+  }
+
+  @include except-mobile {
+    justify-content: space-between;
+    max-width: 1232rem;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 40rem;
+    padding-right: 32rem;
+    padding-left: 32rem;
+  }
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: block;
+
+  img {
+    display: block;
+    width: 142rem;
+  }
+}
+
+.logoTitle {
+  position: relative;
+  margin-left: 18rem;
+  padding-left: 16rem;
+  padding-bottom: 4rem;
+  font-weight: 600;
+  font-size: 18rem;
+
+  &::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #5B6471;
+    content: '';
+  }
+}
+
+.right {
+  display: flex;
+  align-items: center;
+
+  @include mobile {
+    flex-direction: column;
+    margin-top: 32rem;
+  }
+}
+
+.nav {
+  display: flex;
+}
+
+.navItem {
+
+  @include mobile {
+    margin-left: 32rem;
+    font-size: 16rem;
+  }
+
+  @include except-mobile {
+    margin-left: 20rem;
+    font-size: 15rem;
+  }
+
+  &:any-link {
+    color: #fff;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
