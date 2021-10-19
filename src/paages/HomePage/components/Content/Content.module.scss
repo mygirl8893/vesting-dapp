@@ -11,15 +11,55 @@
 .title {
   color: #fff;
   font-weight: 600;
-  font-size: 24rem;
-  line-height: 36rem;
+
+  @include mobile {
+    font-size: 20rem;
+    line-height: 28rem;
+  }
+
+  @include except-mobile {
+    font-size: 24rem;
+    line-height: 36rem;
+  }
 }
 
 .text {
   color: #8E9DB1;
   font-weight: 600;
-  font-size: 16rem;
-  line-height: 22rem;
+
+  @include mobile {
+    margin-top: 4rem;
+    font-size: 14rem;
+    line-height: 20rem;
+  }
+
+  @include except-mobile {
+    font-size: 16rem;
+    line-height: 22rem;
+  }
+}
+
+.balance {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 20rem;
+  line-height: 28rem;
+
+  span {
+    color: #8E9DB1;
+  }
+
+  div {
+    margin-left: 12rem;
+  }
+
+  img {
+    display: block;
+    width: 20rem;
+    margin: 6rem 0 0 12rem;
+  }
 }
 
 

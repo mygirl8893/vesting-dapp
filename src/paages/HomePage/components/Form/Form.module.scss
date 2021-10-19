@@ -2,12 +2,18 @@
   padding: 0 16rem;
 }
 
+.title {
+  margin-top: 20rem;
+  margin-bottom: 4rem;
+}
+
 .submitButton {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 48rem;
+  margin-top: 40rem;
   border: 0;
   font-weight: 600;
   color: #4D5A6A;
@@ -28,22 +34,5 @@
 
   &.disabled {
     cursor: not-allowed;
-  }
-}
-
-
-@include mobile {
-
-}
-
-@include except-mobile {
-
-  .title {
-    margin-top: 20rem;
-    margin-bottom: 4rem;
-  }
-
-  .submitButton {
-    margin-top: 40rem;
   }
 }

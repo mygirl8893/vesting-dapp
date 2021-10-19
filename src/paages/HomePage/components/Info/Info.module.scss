@@ -4,6 +4,10 @@
   background-color: rgba(26, 31, 38, 0.3);
   box-shadow: #2a595e 0 2px 10px;
   border-radius: 8rem;
+
+  @include mobile {
+    padding-bottom: 24rem;
+  }
 }
 
 .title {

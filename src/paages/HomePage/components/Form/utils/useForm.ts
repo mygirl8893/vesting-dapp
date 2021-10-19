@@ -60,13 +60,6 @@ const useForm = () => {
       cliffDate = getSeconds(cliffDate) as any
       amount = parseUnits(amount, decimals) as any
 
-      console.log(333, {
-        startDate,
-        endDate,
-        cliffDate,
-        amount,
-      })
-
       const receipt = await vestingContract.holdTokens(address, amount, startDate, endDate, cliffDate)
       await receipt.wait()
     }

@@ -15,7 +15,6 @@
 }
 
 .stat {
-  width: calc(100% / 3 - 2px);
   text-align: center;
 
   @include mobile {
@@ -27,6 +26,7 @@
   }
 
   @include except-mobile {
+    width: calc(100% / 3 - 2px);
     padding: 0 20rem;
   }
 
