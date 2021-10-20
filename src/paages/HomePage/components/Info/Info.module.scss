@@ -1,12 +1,17 @@
-.info {
-  border: 1px solid #306a70;
+.block {
+  margin-top: 24rem;
   padding: 16rem 20rem;
+  border: 1px solid #306a70;
   background-color: rgba(26, 31, 38, 0.3);
   box-shadow: #2a595e 0 2px 10px;
   border-radius: 8rem;
 
   @include mobile {
     padding-bottom: 24rem;
+  }
+
+  &:first-child {
+    margin-top: 0;
   }
 }
 

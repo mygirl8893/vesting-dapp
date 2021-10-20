@@ -55,7 +55,7 @@ const ClaimButton = ({ contractName, availableToClaim, onClaim }) => {
 }
 
 const Vesting = ({ isFetching, data, withDates, onClaim }) => {
-  const { availableToClaim, startDate, cliffDate, endDate } = data || {}
+  const { startDate, cliffDate, endDate } = data || {}
 
   return (
     <div className={s.vesting}>
@@ -64,7 +64,7 @@ const Vesting = ({ isFetching, data, withDates, onClaim }) => {
           <div className={s.dates}>
             {
               withDates && (
-                <span>Vesting period from {dayjs(startDate).format('DD MMM YYYY')} to {dayjs(endDate).format('DD MMM YYYY')}.<br /></span>
+                <>Vesting period from {dayjs(startDate).format('DD MMM YYYY')} to {dayjs(endDate).format('DD MMM YYYY')}.&nbsp;</>
               )
             }
             End of your cliff: {dayjs(cliffDate).format('DD MMM YYYY')}
@@ -80,7 +80,7 @@ const AutoVesting = ({ isFetching, blocks, onClaim }) => {
   const availableToClaim = blocks.reduce((acc, { availableToClaim }) => acc + availableToClaim, 0)
 
   return (
-    <>
+    <div className={s.block}>
       {
         blocks.map((autoData, index) => (
           <Vesting
@@ -93,7 +93,7 @@ const AutoVesting = ({ isFetching, blocks, onClaim }) => {
         ))
       }
       <ClaimButton {...{ contractName: 'autoVesting', availableToClaim, onClaim }} />
-    </>
+    </div>
   )
 }
 
@@ -101,10 +101,10 @@ const ManualVesting = ({ isFetching, data, onClaim }) => {
   const { availableToClaim } = data
 
   return (
-    <>
+    <div className={s.block}>
       <Vesting {...{ isFetching, data, withDates: true, onClaim }} />
       <ClaimButton {...{ contractName: 'manualVesting', availableToClaim, onClaim }} />
-    </>
+    </div>
   )
 }
 
@@ -136,7 +136,7 @@ const Info = () => {
     <div className={s.info}>
       <div className={s.title}>Your initial token sale dashboard</div>
       {
-        autoData && (
+        Boolean(autoData && autoData.length) && (
           <AutoVesting
             isFetching={isFetching || isAutoFetching}
             blocks={autoData}
