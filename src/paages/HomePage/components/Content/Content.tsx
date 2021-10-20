@@ -14,12 +14,16 @@ const Balance = () => {
 
   const fetch = async () => {
     const cpoolContract = getContract('cpool')
+    const vestingContract = getContract('manualVesting')
 
-    const balance = await cpoolContract.balanceOf(contracts.manualVesting.address)
+    const [ balance, totalVest ] = await Promise.all([
+      cpoolContract.balanceOf(contracts.manualVesting.address),
+      vestingContract.totalVest(),
+    ])
 
     setState({
       isFetching: false,
-      balance: parseFloat(parseFloat(formatUnits(balance, 18)).toFixed(4)),
+      balance: parseFloat(parseFloat(formatUnits(balance.sub(totalVest), 18)).toFixed(4)),
     })
   }
 
