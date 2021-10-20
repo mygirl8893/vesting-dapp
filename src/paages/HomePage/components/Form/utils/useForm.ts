@@ -60,8 +60,10 @@ const useForm = () => {
       cliffDate = getSeconds(cliffDate) as any
       amount = parseUnits(amount, decimals) as any
 
-      const receipt = await vestingContract.holdTokens(address, amount, startDate, endDate, cliffDate)
+      const receipt = await vestingContract.holdTokens(address, amount, startDate, cliffDate, endDate)
       await receipt.wait()
+
+      setSubmitting(false)
     }
     catch (err) {
       console.error(err)

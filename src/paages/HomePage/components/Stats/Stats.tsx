@@ -1,7 +1,4 @@
-import React, { Fragment, useState } from 'react'
-import { getContract } from 'contracts'
-import { useConnect } from 'web3'
-import cx from 'classnames'
+import React, { Fragment } from 'react'
 
 import s from './Stats.module.scss'
 
@@ -9,8 +6,7 @@ import s from './Stats.module.scss'
 const Stats = ({ isFetching, data, onClaim }) => {
   const { totalTokens, alreadyClaimed, alreadyVested, availableToClaim, remainingToVest } = data || {}
 
-  const { account } = useConnect()
-  const [ isSubmitting, setSubmitting ] = useState(false)
+
 
   const stats = [
     {
@@ -34,29 +30,6 @@ const Stats = ({ isFetching, data, onClaim }) => {
       value: availableToClaim,
     },
   ]
-
-  const handleClaimClick = async () => {
-    if (!account || !availableToClaim || isSubmitting) {
-      return
-    }
-
-    try {
-      setSubmitting(true)
-
-      const vestingContract = getContract('manualVesting', true)
-
-      const receipt = await vestingContract.claim(account)
-      const trx = await receipt.wait()
-
-      setSubmitting(false)
-      onClaim()
-    }
-    catch (err) {
-      setSubmitting(false)
-      console.error(err)
-      alert(err?.message || err)
-    }
-  }
 
   return (
     <>
@@ -83,14 +56,6 @@ const Stats = ({ isFetching, data, onClaim }) => {
               </div>
             </Fragment>
           ))
-        }
-      </div>
-      <div className={cx(s.claimButton, { [s.disabled]: !availableToClaim })} onClick={handleClaimClick}>
-        <span>Claim my CPOOL tokens</span>
-        {
-          isSubmitting && (
-            <img src="/images/svg/16/spinner.svg" alt="" />
-          )
         }
       </div>
     </>

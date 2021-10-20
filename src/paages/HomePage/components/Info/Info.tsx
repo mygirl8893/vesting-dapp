@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useConnect } from 'web3'
 import { ownerAddress } from 'contracts'
 import dayjs from 'dayjs'
+import { getContract } from 'contracts'
+import cx from 'classnames'
 
 import { openConnectModal } from 'compositions/modals/ConnectModal/ConnectModal'
 
@@ -13,19 +15,95 @@ import useData from './utils/useData'
 import s from './Info.module.scss'
 
 
-const Vesting = ({ isFetching, data, onClaim }) => {
-  const { startDate, cliffDate, endDate } = data || {}
+const ClaimButton = ({ contractName, availableToClaim, onClaim }) => {
+  const { account } = useConnect()
+  const [ isSubmitting, setSubmitting ] = useState(false)
+
+  const handleClaimClick = async () => {
+    if (!account || !availableToClaim || isSubmitting) {
+      return
+    }
+
+    try {
+      setSubmitting(true)
+
+      const vestingContract = getContract(contractName as 'manualVesting', true)
+
+      const receipt = await vestingContract.claim(account)
+      const trx = await receipt.wait()
+
+      setSubmitting(false)
+      onClaim()
+    }
+    catch (err) {
+      setSubmitting(false)
+      console.error(err)
+      alert(err?.message || err)
+    }
+  }
 
   return (
-    <>
+    <div className={cx(s.claimButton, { [s.disabled]: !availableToClaim })} onClick={handleClaimClick}>
+      <span>Claim my CPOOL tokens</span>
+      {
+        isSubmitting && (
+          <img src="/images/svg/16/spinner.svg" alt="" />
+        )
+      }
+    </div>
+  )
+}
+
+const Vesting = ({ isFetching, data, withDates, onClaim }) => {
+  const { availableToClaim, startDate, cliffDate, endDate } = data || {}
+
+  return (
+    <div className={s.vesting}>
       {
         Boolean(data.totalTokens) && (
           <div className={s.dates}>
-            Vesting period from {dayjs(startDate).format('DD MMM YYYY')} to {dayjs(endDate).format('DD MMM YYYY')}.<br />End of your cliff: {dayjs(cliffDate).format('DD MMM YYYY')}
+            {
+              withDates && (
+                <span>Vesting period from {dayjs(startDate).format('DD MMM YYYY')} to {dayjs(endDate).format('DD MMM YYYY')}.<br /></span>
+              )
+            }
+            End of your cliff: {dayjs(cliffDate).format('DD MMM YYYY')}
           </div>
         )
       }
       <Stats isFetching={isFetching} data={data} onClaim={onClaim} />
+    </div>
+  )
+}
+
+const AutoVesting = ({ isFetching, blocks, onClaim }) => {
+  const availableToClaim = blocks.reduce((acc, { availableToClaim }) => acc + availableToClaim, 0)
+
+  return (
+    <>
+      {
+        blocks.map((autoData, index) => (
+          <Vesting
+            key={index}
+            isFetching={isFetching}
+            data={autoData}
+            withDates={index === 0}
+            onClaim={onClaim}
+          />
+        ))
+      }
+      <ClaimButton {...{ contractName: 'autoVesting', availableToClaim, onClaim }} />
+    </>
+  )
+}
+
+const ManualVesting = ({ isFetching, data, onClaim }) => {
+  const { availableToClaim } = data
+
+  return (
+    <>
+      <Vesting {...{ isFetching, data, withDates: true, onClaim }} />
+      <ClaimButton {...{ contractName: 'manualVesting', availableToClaim, onClaim }} />
     </>
   )
 }
@@ -59,16 +137,16 @@ const Info = () => {
       <div className={s.title}>Your initial token sale dashboard</div>
       {
         autoData && (
-          <Vesting
+          <AutoVesting
             isFetching={isFetching || isAutoFetching}
-            data={autoData}
+            blocks={autoData}
             onClaim={fetchAutoData}
           />
         )
       }
       {
-        manualData && (
-          <Vesting
+        Boolean(manualData && manualData.totalTokens) && (
+          <ManualVesting
             isFetching={isFetching || isManualFetching}
             data={manualData}
             onClaim={fetchManualData}

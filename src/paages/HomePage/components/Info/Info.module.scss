@@ -24,6 +24,14 @@
   line-height: 18rem;
 }
 
+.vesting {
+  margin-top: 40rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
 .connectButton {
   display: block;
   width: 280rem;
@@ -43,6 +51,39 @@
   &:disabled {
     color: #4D5A6A;
     background-color: #323842;
+    cursor: not-allowed;
+  }
+}
+
+.claimButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 280rem;
+  height: 38rem;
+  margin: 40rem auto 0;
+  border: 0;
+  font-weight: 600;
+  color: #4D5A6A;
+  font-size: 12rem;
+  text-align: center;
+  text-transform: uppercase;
+  background: none;
+  background-color: #F6F9FB;
+  cursor: pointer;
+  border-radius: 6rem;
+
+  img {
+    display: block;
+    width: 10rem;
+    margin-top: 2rem;
+    margin-left: 8rem;
+    vertical-align: top;
+    filter: invert(1);
+  }
+
+  &.disabled {
+    background-color: #aaa;
     cursor: not-allowed;
   }
 }

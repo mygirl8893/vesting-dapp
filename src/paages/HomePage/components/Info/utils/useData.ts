@@ -16,10 +16,62 @@ export type Data = {
   endDate: number
 }
 
-const formatValue = (value, decimals) =>
-  parseFloat(formatUnits(value, decimals))
+const decimals = 18
 
-const getData = async ({ account, vestingContract }) => {
+const formatValue = (value, decimals) =>
+  parseFloat(parseFloat(formatUnits(value, decimals)).toFixed(4))
+
+const getAutoData = async ({ account }) => {
+  const vestingContract = getContract('autoVesting')
+
+  const [ vestingBegin, vestingEnd, count ] = await Promise.all([
+    vestingContract.vestingBegin(),
+    vestingContract.vestingEnd(),
+    vestingContract.vestingCountOf(account),
+  ])
+
+  const startDate = new Date(vestingBegin as any * 1000)
+  const endDate = new Date(vestingEnd as any * 1000)
+
+  if (!count) {
+    return null
+  }
+
+  const infos = await Promise.all([ ...Array(parseInt(count.toString())).keys() ].map(async (_, index) => {
+    const id = await vestingContract.vestingIds(account, index)
+
+    const [ balance, { amount, vestingCliff, claimed } ] = await Promise.all([
+      vestingContract.getAvailableBalance(id),
+      vestingContract.vestings(id),
+    ])
+
+    const totalTokens = formatValue(amount, decimals)
+    const alreadyClaimed = formatValue(claimed, decimals)
+    const alreadyVested = formatValue(balance.add(claimed), decimals)
+    const remainingToVest = formatValue(amount.sub(balance).sub(claimed), decimals)
+    const availableToClaim = formatValue(balance, decimals)
+    const cliffDate = new Date(vestingCliff as any * 1000)
+
+    return {
+      id,
+      totalTokens,
+      alreadyClaimed,
+      alreadyVested,
+      remainingToVest,
+      availableToClaim,
+      cliffDate,
+    }
+  }))
+
+  return infos.map((data) => ({
+    ...data,
+    startDate,
+    endDate,
+  }))
+}
+
+const getManualData = async ({ account }) => {
+  const vestingContract = getContract('manualVesting')
   const cpoolContract = getContract('cpool')
 
   const [ decimals, info, balance ] = await Promise.all([
@@ -32,9 +84,9 @@ const getData = async ({ account, vestingContract }) => {
 
   const totalTokens = formatValue(amount, decimals)
   const alreadyClaimed = formatValue(claimed, decimals)
-  const alreadyVested = formatValue(balance.add(claimed), decimals)
   const availableToClaim = formatValue(balance, decimals)
-  const remainingToVest = formatValue(amount.sub(claimed), decimals)
+  const alreadyVested = formatValue(balance.add(claimed), decimals)
+  const remainingToVest = formatValue(amount.sub(balance).sub(claimed), decimals)
 
   const startDate = new Date(vestingBegin as any * 1000)
   const cliffDate = new Date(vestingCliff as any * 1000)
@@ -65,13 +117,9 @@ const useData = () => {
   const { isFetching, isAutoFetching, isManualFetching, autoData, manualData } = state
 
   const fetch = async () => {
-    const autoVestingContract = getContract('autoVesting')
-    const manualVestingContract = getContract('manualVesting')
-
     const [ autoData, manualData ] = await Promise.all([
-      // getData({ account, vestingContract: autoVestingContract }),
-      Promise.resolve(null),
-      getData({ account, vestingContract: manualVestingContract }),
+      getAutoData({ account }),
+      getManualData({ account }),
     ])
 
     setState({
@@ -103,9 +151,7 @@ const useData = () => {
   const fetchAutoData = async () => {
     setState({ isAutoFetching: true })
 
-    const vestingContract = getContract('autoVesting')
-
-    const data = await getData({ account, vestingContract })
+    const data = await getAutoData({ account })
 
     setState({
       isAutoFetching: false,
@@ -116,9 +162,7 @@ const useData = () => {
   const fetchManualData = async () => {
     setState({ isManualFetching: true })
 
-    const vestingContract = getContract('manualVesting')
-
-    const data = await getData({ account, vestingContract })
+    const data = await getManualData({ account })
 
     setState({
       isManualFetching: false,
