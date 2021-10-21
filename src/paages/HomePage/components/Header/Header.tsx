@@ -17,8 +17,8 @@ const Header = () => {
       </div>
       <div className={s.right}>
         <div className={s.nav}>
-          <a className={s.navItem} href="https://clearpool-finance.gitbook.io/about">About</a>
-          <a className={s.navItem} href="https://clearpool.finance/#buy-cpool">Buy $CPOOL</a>
+          <a className={s.navItem} href="https://clearpool-finance.gitbook.io/about" target="_blank" rel="noreferrer">About</a>
+          <a className={s.navItem} href="https://clearpool.finance?scrollTo=markets">Buy $CPOOL</a>
         </div>
         <AccountButton />
       </div>
