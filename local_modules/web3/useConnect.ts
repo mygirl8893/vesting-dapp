@@ -7,7 +7,7 @@ import connectors from './connectors'
 import constants from './constants'
 
 
-const requiredChainId = 4
+const requiredChainId = 42
 
 type Output = {
   account: string

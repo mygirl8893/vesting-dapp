@@ -63,7 +63,9 @@ const useForm = () => {
       const receipt = await vestingContract.holdTokens(address, amount, startDate, cliffDate, endDate)
       await receipt.wait()
 
+      form.unsetValues()
       setSubmitting(false)
+      alert('Success!')
     }
     catch (err) {
       console.error(err)
