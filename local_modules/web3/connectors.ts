@@ -4,7 +4,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
 export enum ConnectorNames {
   Injected,
-  // WalletConnect
+  WalletConnect
 }
 
 const injected = new InjectedConnector({
@@ -24,5 +24,5 @@ const walletconnect = new WalletConnectConnector({
 
 export default {
   [ConnectorNames.Injected]: injected,
-  // [ConnectorNames.WalletConnect]: walletconnect,
+  [ConnectorNames.WalletConnect]: walletconnect,
 }
