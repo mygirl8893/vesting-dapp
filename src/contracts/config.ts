@@ -42,3 +42,5 @@ export const contracts: ContractsData = {
     abi: manualVestingAbi,
   },
 }
+
+console.log('contracts:', contracts)
