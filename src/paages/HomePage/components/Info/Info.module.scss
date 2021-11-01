@@ -15,6 +15,15 @@
   }
 }
 
+.empty {
+  margin-top: 20rem;
+  font-size: 16rem;
+
+  @include except-mobile {
+    padding-left: 16rem;
+  }
+}
+
 .title {
   color: #fff;
   font-weight: 600;
