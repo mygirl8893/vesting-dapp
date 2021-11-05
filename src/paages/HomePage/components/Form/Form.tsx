@@ -45,7 +45,7 @@ const EndDate: React.FC<EndDateProps> = ({ form, minDate }) => {
     form.fields.endDate.set(date.getTime())
   }
 
-  const maxDate = startDate ? new Date(new Date(startDate).setFullYear(new Date(startDate).getFullYear() + 1)) : null
+  const maxDate = startDate ? new Date(new Date(startDate).setFullYear(new Date(startDate).getFullYear() + 3)) : null
 
   return (
     <DatePicker
