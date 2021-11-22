@@ -17,7 +17,7 @@ const Meta = () => (
     <meta httpEquiv="Content-Type" content="text/html charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="description" content={description} />
-    <meta property="og:url" content={`https://vest.clearpool.finance`} />
+    <meta property="og:url" content="https://vest.clearpool.finance" />
     <meta property="og:title" content={meta.title} />
     <meta property="og:description" content={meta.description} />
     <meta property="og:image" content={meta.image} />

@@ -56,10 +56,10 @@
       "afterOpening": "never",
       "beforeClosing": "allow"
     } ],
-   "react/jsx-curly-newline": [ "error", {
-     "multiline": "require",
-     "singleline": "consistent"
-   } ],
+    "react/jsx-curly-newline": [ "error", {
+      "multiline": "require",
+      "singleline": "consistent"
+    } ],
 
     // React hooks plugin
 
@@ -88,13 +88,13 @@
     "@typescript-eslint/no-misused-promises": "warn",
     "@typescript-eslint/restrict-plus-operands": "error",
     "@typescript-eslint/naming-convention": [
-           "warn",
-          {
-            "selector": "variable",
-            "types": ["boolean"],
-            "format": ["PascalCase"],
-            "prefix": ["is", "should", "has", "can", "did", "will"]
-          }
+      "warn",
+      {
+        "selector": "variable",
+        "types": ["boolean"],
+        "format": ["PascalCase"],
+        "prefix": ["is", "should", "has", "can", "did", "will"]
+      }
     ]
   }
 }
