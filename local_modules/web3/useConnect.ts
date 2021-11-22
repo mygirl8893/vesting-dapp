@@ -7,7 +7,7 @@ import connectors from './connectors'
 import constants from './constants'
 
 
-const requiredChainId = 42
+const requiredChainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID)
 
 type Output = {
   account: string

@@ -23,7 +23,7 @@ const createContracts = (withWalletProvider?: boolean) => {
   else {
     provider = typeof window !== 'undefined' && window.ethereum
       ? new Web3Provider(window.ethereum) // Metamask
-      : new AlchemyProvider('kovan', process.env.NEXT_PUBLIC_ALCHEMY_URL)
+      : new AlchemyProvider(parseInt(process.env.NEXT_PUBLIC_CHAIN_ID), process.env.NEXT_PUBLIC_ALCHEMY_URL)
   }
 
   names.forEach((name) => {
