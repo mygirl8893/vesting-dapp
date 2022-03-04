@@ -1,33 +1,32 @@
 import React, { Fragment } from 'react'
+import { toLocaleString } from 'helpers'
 
 import s from './Stats.module.scss'
 
 
-const Stats = ({ isFetching, data, onClaim }) => {
+const Stats = ({ isFetching, data }) => {
   const { totalTokens, alreadyClaimed, alreadyVested, availableToClaim, remainingToVest } = data || {}
-
-
 
   const stats = [
     {
       title: 'Total tokens',
-      value: totalTokens,
+      value: toLocaleString(totalTokens),
     },
     {
       title: 'Already vested',
-      value: alreadyVested,
+      value: toLocaleString(alreadyVested),
     },
     {
       title: 'Remaining to vest',
-      value: remainingToVest,
+      value: toLocaleString(remainingToVest),
     },
     {
       title: 'Already claimed',
-      value: alreadyClaimed,
+      value: toLocaleString(alreadyClaimed),
     },
     {
       title: 'Available to claim',
-      value: availableToClaim,
+      value: toLocaleString(availableToClaim),
     },
   ]
 
